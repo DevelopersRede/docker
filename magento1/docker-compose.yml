@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:5.6
+    container_name: modulo.magento-1.9.mysql
+    environment:
+      MYSQL_DATABASE: magento
+      MYSQL_USER: modulo
+      MYSQL_PASSWORD: rede
+      MYSQL_ROOT_PASSWORD: rede
+    networks:
+    - modulo-rede
+    volumes:
+    - .mysql:/var/lib/mysql:z
+
+  magento:
+    image: magento:1.9
+    build: .
+    container_name: modulo.magento-1.9
+    ports:
+    - "80:80"
+    links:
+    - mysql
+    depends_on:
+    - mysql
+    networks:
+    - modulo-rede
+
+networks:
+  modulo-rede:
+    driver: bridge
